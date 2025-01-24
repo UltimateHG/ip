@@ -9,7 +9,7 @@ public class uhgbot {
                           " What can I do for you?\n" +
                           "____________________________________________________________";
         
-        ArrayList<String> tasks = new ArrayList<>();
+        ArrayList<Task> tasks = new ArrayList<>();
         System.out.println(welcomeMsg);
         
         Scanner scanner = new Scanner(System.in);
@@ -26,13 +26,37 @@ public class uhgbot {
                 if (tasks.isEmpty()) {
                     System.out.println(" No tasks in the list!");
                 } else {
+                    System.out.println(" Here are the tasks in your list:");
                     for (int i = 0; i < tasks.size(); i++) {
-                        System.out.println(" " + (i + 1) + ". " + tasks.get(i));
+                        System.out.println(" " + (i + 1) + "." + tasks.get(i));
                     }
                 }
+            } else if (input.toLowerCase().startsWith("mark ")) {
+                try {
+                    int taskNum = Integer.parseInt(input.split(" ")[1]) - 1;
+                    if (taskNum >= 0 && taskNum < tasks.size()) {
+                        tasks.get(taskNum).markAsDone();
+                        System.out.println(" Nice! I've marked this task as done:");
+                        System.out.println("   " + tasks.get(taskNum));
+                    }
+                } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                    System.out.println(" Invalid task number!");
+                }
+            } else if (input.toLowerCase().startsWith("unmark ")) {
+                try {
+                    int taskNum = Integer.parseInt(input.split(" ")[1]) - 1;
+                    if (taskNum >= 0 && taskNum < tasks.size()) {
+                        tasks.get(taskNum).markAsUndone();
+                        System.out.println(" OK, I've marked this task as not done yet:");
+                        System.out.println("   " + tasks.get(taskNum));
+                    }
+                } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                    System.out.println(" Invalid task number!");
+                }
             } else {
-                tasks.add(input);
-                System.out.println(" added: " + input);
+                Task newTask = new Task(input);
+                tasks.add(newTask);
+                System.out.println(" added: " + newTask);
             }
             
             System.out.println("____________________________________________________________");

@@ -104,6 +104,20 @@ public class uhgbot {
                     System.out.println(" Got it. I've added this task:");
                     System.out.println("   " + task);
                     System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
+                } else if (input.toLowerCase().startsWith("delete ")) {
+                    try {
+                        int taskNum = Integer.parseInt(input.split(" ")[1]) - 1;
+                        if (taskNum >= 0 && taskNum < tasks.size()) {
+                            Task removedTask = tasks.remove(taskNum);
+                            System.out.println(" Noted. I've removed this task:");
+                            System.out.println("   " + removedTask);
+                            System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
+                        } else {
+                            throw new uhgbotException("Invalid task number: " + (taskNum + 1));
+                        }
+                    } catch (NumberFormatException e) {
+                        throw new uhgbotException("Please provide a valid task number.");
+                    }
                 } else {
                     throw new uhgbotException("Invalid command: " + input);
                 }

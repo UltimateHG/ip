@@ -53,12 +53,35 @@ public class uhgbot {
                 } catch (NumberFormatException | IndexOutOfBoundsException e) {
                     System.out.println(" Invalid task number!");
                 }
-            } else {
-                Task newTask = new Task(input);
-                tasks.add(newTask);
-                System.out.println(" added: " + newTask);
+                    } else if (input.toLowerCase().startsWith("todo ")) {
+            String description = input.substring(5);
+            Todo task = new Todo(description);
+            tasks.add(task);
+            System.out.println(" Got it. I've added this task:");
+            System.out.println("   " + task);
+            System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
+        } else if (input.toLowerCase().startsWith("deadline ")) {
+            String[] parts = input.substring(9).split(" /by ");
+            if (parts.length == 2) {
+                Deadline task = new Deadline(parts[0], parts[1]);
+                tasks.add(task);
+                System.out.println(" Got it. I've added this task:");
+                System.out.println("   " + task);
+                System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
             }
-            
+        } else if (input.toLowerCase().startsWith("event ")) {
+            String[] parts = input.substring(6).split(" /from ");
+            if (parts.length == 2) {
+                String[] timeParts = parts[1].split(" /to ");
+                if (timeParts.length == 2) {
+                    Event task = new Event(parts[0], timeParts[0], timeParts[1]);
+                    tasks.add(task);
+                    System.out.println(" Got it. I've added this task:");
+                    System.out.println("   " + task);
+                    System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
+                }
+            }
+        }
             System.out.println("____________________________________________________________");
         }
         

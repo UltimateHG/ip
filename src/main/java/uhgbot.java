@@ -1,7 +1,19 @@
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class UhgBot {
+    /** Directory path for data storage. */
+    private static final String DATA_DIR = "./data";
+    
+    /** File path for tasks storage. */
+    private static final String DATA_FILE = DATA_DIR + "/uhgbot.txt";
+
     /**
      * Creates a new Todo task from user input.
      *
@@ -50,6 +62,95 @@ public class UhgBot {
         }
         return new Event(parts[0].trim(), timeParts[0].trim(), timeParts[1].trim());
     }
+
+    /**
+     * Creates the data directory if it does not exist.
+     *
+     * @throws IOException if there is an error creating the directory
+     */
+    private static void createDataDirectory() throws IOException {
+        Path path = Paths.get(DATA_DIR);
+        if (!Files.exists(path)) {
+            Files.createDirectory(path);
+        }
+    }
+
+    /**
+     * Saves the current task list to a file in CSV format.
+     * Format for different task types:
+     * Todo: T,isDone,description
+     * Deadline: D,isDone,description,by
+     * Event: E,isDone,description,start,end
+     *
+     * @param tasks ArrayList of Task objects to be saved
+     * @throws IOException if there is an error writing to the file
+     */
+    private static void saveTasksToFile(ArrayList<Task> tasks) throws IOException {
+        createDataDirectory();
+        try (FileWriter fw = new FileWriter(DATA_FILE)) {
+            for (Task task : tasks) {
+                if (task instanceof Todo) {
+                    fw.write(String.format("T,%d,%s\n", 
+                        task.isDone ? 1 : 0, task.description));
+                } else if (task instanceof Deadline) {
+                    Deadline d = (Deadline) task;
+                    fw.write(String.format("D,%d,%s,%s\n", 
+                        task.isDone ? 1 : 0, task.description, d.by));
+                } else if (task instanceof Event) {
+                    Event e = (Event) task;
+                    fw.write(String.format("E,%d,%s,%s,%s\n", 
+                        task.isDone ? 1 : 0, task.description, e.start, e.end));
+                }
+            }
+        }
+    }
+
+    /**
+     * Loads tasks from the storage file.
+     * Expects CSV format with task type indicator as first field:
+     * T - Todo task
+     * D - Deadline task
+     * E - Event task
+     *
+     * @return ArrayList of Task objects loaded from file
+     * @throws IOException if there is an error reading from the file
+     */
+    private static ArrayList<Task> loadTasksFromFile() throws IOException {
+        ArrayList<Task> tasks = new ArrayList<>();
+        File file = new File(DATA_FILE);
+        
+        if (!file.exists()) {
+            return tasks;
+        }
+        
+        try (Scanner sc = new Scanner(file)) {
+            while (sc.hasNextLine()) {
+                String[] parts = sc.nextLine().split(",");
+                Task task = null;
+                
+                switch (parts[0]) {
+                case "T":
+                    task = new Todo(parts[2]);
+                    break;
+                case "D":
+                    task = new Deadline(parts[2], parts[3]);
+                    break;
+                case "E":
+                    task = new Event(parts[2], parts[3], parts[4]);
+                    break;
+                }
+                
+                if (task != null && parts[1].equals("1")) {
+                    task.markAsDone();
+                }
+                
+                if (task != null) {
+                    tasks.add(task);
+                }
+            }
+        }
+        return tasks;
+    }
     
     public static void main(String[] args) {
         final String BOT_NAME = "UhgBot";
@@ -62,6 +163,14 @@ public class UhgBot {
         
         ArrayList<Task> tasks = new ArrayList<>();
         System.out.println(WELCOME_MESSAGE);
+
+        // Load saved tasks from file if exists
+        try {
+            tasks = loadTasksFromFile();
+        } catch (IOException e) {
+            System.out.println(" Error loading saved tasks: " + e.getMessage());
+            tasks = new ArrayList<>();
+        }
         
         Scanner scanner = new Scanner(System.in);
         boolean isRunning = true;
@@ -99,6 +208,12 @@ public class UhgBot {
                         int taskNum = Integer.parseInt(input.split(" ")[1]) - 1;
                         if (taskNum >= 0 && taskNum < tasks.size()) {
                             tasks.get(taskNum).markAsDone();
+                            // Save changes to file
+                            try {
+                                saveTasksToFile(tasks);
+                            } catch (IOException e) {
+                                System.out.println(" Error saving tasks: " + e.getMessage());
+                            }
                             System.out.println(" Nice! I've marked this task as done:");
                             System.out.println("   " + tasks.get(taskNum));
                         }
@@ -111,6 +226,12 @@ public class UhgBot {
                         int taskNum = Integer.parseInt(input.split(" ")[1]) - 1;
                         if (taskNum >= 0 && taskNum < tasks.size()) {
                             tasks.get(taskNum).markAsUndone();
+                            // Save changes to file
+                            try {
+                                saveTasksToFile(tasks);
+                            } catch (IOException e) {
+                                System.out.println(" Error saving tasks: " + e.getMessage());
+                            }
                             System.out.println(" OK, I've marked this task as not done yet:");
                             System.out.println("   " + tasks.get(taskNum));
                         }
@@ -121,6 +242,12 @@ public class UhgBot {
                     // "todo" command, create new Todo task
                     Task task = createTodo(input);
                     tasks.add(task);
+                    // Save changes to file
+                    try {
+                        saveTasksToFile(tasks);
+                    } catch (IOException e) {
+                        System.out.println(" Error saving tasks: " + e.getMessage());
+                    }
                     System.out.println(" Got it. I've added this task:");
                     System.out.println("   " + task);
                     System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
@@ -128,6 +255,12 @@ public class UhgBot {
                     // "deadline" command, create new Deadline task
                     Task task = createDeadline(input);
                     tasks.add(task);
+                    // Save changes to file
+                    try {
+                        saveTasksToFile(tasks);
+                    } catch (IOException e) {
+                        System.out.println(" Error saving tasks: " + e.getMessage());
+                    }
                     System.out.println(" Got it. I've added this task:");
                     System.out.println("   " + task);
                     System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
@@ -135,6 +268,12 @@ public class UhgBot {
                     // "event" command, create new Event
                     Task task = createEvent(input);
                     tasks.add(task);
+                    // Save changes to file
+                    try {
+                        saveTasksToFile(tasks);
+                    } catch (IOException e) {
+                        System.out.println(" Error saving tasks: " + e.getMessage());
+                    }
                     System.out.println(" Got it. I've added this task:");
                     System.out.println("   " + task);
                     System.out.println(" Now you have " + tasks.size() + " tasks in the list.");
@@ -144,6 +283,12 @@ public class UhgBot {
                         int taskNum = Integer.parseInt(input.split(" ")[1]) - 1;
                         if (taskNum >= 0 && taskNum < tasks.size()) {
                             Task removedTask = tasks.remove(taskNum);
+                            // Save changes to file
+                            try {
+                                saveTasksToFile(tasks);
+                            } catch (IOException e) {
+                                System.out.println(" Error saving tasks: " + e.getMessage());
+                            }
                             System.out.println(" Noted. I've removed this task:");
                             System.out.println("   " + removedTask);
                             System.out.println(" Now you have " + tasks.size() + " tasks in the list.");

@@ -1,5 +1,5 @@
-public class uhgbotException extends Exception {
-    public uhgbotException(String message) {
+public class UhgBotException extends Exception {
+    public UhgBotException(String message) {
         super(message);
     }
 }

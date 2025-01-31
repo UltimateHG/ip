@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class UhgBot {
@@ -86,24 +87,27 @@ public class UhgBot {
      * @throws IOException if there is an error writing to the file
      */
     private static void saveTasksToFile(ArrayList<Task> tasks) throws IOException {
-        createDataDirectory();
-        try (FileWriter fw = new FileWriter(DATA_FILE)) {
-            for (Task task : tasks) {
-                if (task instanceof Todo) {
-                    fw.write(String.format("T,%d,%s\n", 
-                        task.isDone ? 1 : 0, task.description));
-                } else if (task instanceof Deadline) {
-                    Deadline d = (Deadline) task;
-                    fw.write(String.format("D,%d,%s,%s\n", 
-                        task.isDone ? 1 : 0, task.description, d.by));
-                } else if (task instanceof Event) {
-                    Event e = (Event) task;
-                    fw.write(String.format("E,%d,%s,%s,%s\n", 
-                        task.isDone ? 1 : 0, task.description, e.start, e.end));
-                }
+    createDataDirectory();
+    try (FileWriter fw = new FileWriter(DATA_FILE)) {
+        for (Task task : tasks) {
+            if (task instanceof Todo) {
+                fw.write(String.format("T,%d,%s\n", 
+                    task.isDone ? 1 : 0, task.description));
+            } else if (task instanceof Deadline) {
+                Deadline d = (Deadline) task;
+                fw.write(String.format("D,%d,%s,%s\n", 
+                    task.isDone ? 1 : 0, task.description, 
+                    d.by.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"))));
+            } else if (task instanceof Event) {
+                Event e = (Event) task;
+                fw.write(String.format("E,%d,%s,%s,%s\n", 
+                    task.isDone ? 1 : 0, task.description,
+                    e.start.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm")),
+                    e.end.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"))));
             }
         }
     }
+}
 
     /**
      * Loads tasks from the storage file.

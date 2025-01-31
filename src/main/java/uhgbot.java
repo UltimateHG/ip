@@ -152,7 +152,9 @@ public class UhgBot {
                     tasks.add(task);
                 }
             }
-        }
+        } catch (UhgBotException e) {
+                    e.printStackTrace();
+                }
         return tasks;
     }
     

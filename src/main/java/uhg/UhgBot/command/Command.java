@@ -1,10 +1,10 @@
-package UhgBot.command;
+package uhg.UhgBot.command;
 
 import java.io.IOException;
 
-import UhgBot.common.UhgBotException;
-import UhgBot.storage.Storage;
-import UhgBot.tasklist.TaskList;
+import uhg.UhgBot.common.UhgBotException;
+import uhg.UhgBot.storage.Storage;
+import uhg.UhgBot.tasklist.TaskList;
 
 public interface Command {
     /**

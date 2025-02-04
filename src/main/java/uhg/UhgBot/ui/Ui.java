@@ -1,4 +1,4 @@
-package UhgBot.ui;
+package uhg.UhgBot.ui;
 
 import java.util.Scanner;
 

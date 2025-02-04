@@ -1,4 +1,4 @@
-package UhgBot.common;
+package uhg.UhgBot.common;
 
 public class UhgBotException extends Exception {
     /**

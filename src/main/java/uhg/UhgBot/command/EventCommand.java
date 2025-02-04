@@ -1,6 +1,6 @@
-package UhgBot.command;
+package uhg.UhgBot.command;
 
-import UhgBot.task.Event;
+import uhg.UhgBot.task.Event;
 
 public class EventCommand extends AddCommand {
     /**

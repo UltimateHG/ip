@@ -1,8 +1,8 @@
-package UhgBot.parser;
+package uhg.UhgBot.parser;
 
-import UhgBot.command.*;
-import UhgBot.task.*;
-import UhgBot.common.UhgBotException;
+import uhg.UhgBot.command.*;
+import uhg.UhgBot.common.UhgBotException;
+import uhg.UhgBot.task.*;
 
 public class Parser {
     /**

@@ -1,7 +1,7 @@
-package UhgBot.command;
+package uhg.UhgBot.command;
 
-import UhgBot.storage.Storage;
-import UhgBot.tasklist.TaskList;
+import uhg.UhgBot.storage.Storage;
+import uhg.UhgBot.tasklist.TaskList;
 
 public class ByeCommand implements Command {
     @Override

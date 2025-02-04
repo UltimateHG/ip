@@ -1,11 +1,11 @@
-package UhgBot.command;
+package uhg.UhgBot.command;
 
 import java.io.IOException;
 
-import UhgBot.common.UhgBotException;
-import UhgBot.storage.Storage;
-import UhgBot.task.Task;
-import UhgBot.tasklist.TaskList;
+import uhg.UhgBot.common.UhgBotException;
+import uhg.UhgBot.storage.Storage;
+import uhg.UhgBot.task.Task;
+import uhg.UhgBot.tasklist.TaskList;
 
 public class UnmarkCommand implements Command {
     private final int index;

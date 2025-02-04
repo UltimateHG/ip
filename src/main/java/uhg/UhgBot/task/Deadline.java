@@ -1,9 +1,10 @@
-package UhgBot.task;
+package uhg.UhgBot.task;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import UhgBot.common.UhgBotException;
+
+import uhg.UhgBot.common.UhgBotException;
 
 public class Deadline extends Task {
     private LocalDateTime by;

@@ -22,3 +22,7 @@ text-ui-test/EXPECTED-UNIX.TXT
 # Local bot task data
 /text-ui-test/data/
 /src/main/java/data/
+
+# any test or data files generated
+data/uhgbot.txt
+test.txt

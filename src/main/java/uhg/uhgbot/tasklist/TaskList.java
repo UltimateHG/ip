@@ -88,6 +88,31 @@ public class TaskList {
         return new ArrayList<>(tasks);
     }
 
+    /**
+     * Finds tasks whose descriptions contain the given keyword.
+     * 
+     * @param keyword The keyword to search for.
+     * @return List of tasks containing the keyword.
+     */
+    public List<Task> findByKeyword(String keyword) {
+        return tasks.stream()
+            .filter(task -> task.getDescription().toLowerCase()
+                .contains(keyword.toLowerCase()))
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * Formats a list of tasks with numbering.
+     * 
+     * @param taskList List of tasks to format.
+     * @return Formatted string representation of tasks.
+     */
+    public static String formatTasks(List<Task> taskList) {
+        return IntStream.range(0, taskList.size())
+            .mapToObj(i -> String.format(" %d.%s", i + 1, taskList.get(i)))
+            .collect(Collectors.joining("\n"));
+    }
+
     @Override
     public String toString() {
         return IntStream.range(0, tasks.size())

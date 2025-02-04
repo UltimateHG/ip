@@ -5,6 +5,7 @@ import uhg.uhgbot.command.Command;
 import uhg.uhgbot.command.DeadlineCommand;
 import uhg.uhgbot.command.DeleteCommand;
 import uhg.uhgbot.command.EventCommand;
+import uhg.uhgbot.command.FindCommand;
 import uhg.uhgbot.command.ListCommand;
 import uhg.uhgbot.command.MarkCommand;
 import uhg.uhgbot.command.TodoCommand;
@@ -46,6 +47,8 @@ public class Parser {
             return parseMark(input);
         case "unmark":
             return parseUnmark(input);
+        case "find":
+            return parseFind(input);
         default:
             throw new UhgBotException("Invalid command: " + input);
         }
@@ -146,5 +149,20 @@ public class Parser {
         } catch (NumberFormatException e) {
             throw new UhgBotException("Please provide a valid task number.");
         }
+    }
+
+    /**
+     * Parses an input string and finds tasks containing string.
+     * 
+     * @param input The input string to search for.
+     * @return FindCommand object.
+     * @throws UhgBotException if keyword is empty.
+     */
+    private Command parseFind(String input) throws UhgBotException {
+        String keyword = input.substring(5).trim();
+        if (keyword.isEmpty()) {
+            throw new UhgBotException("Search keyword cannot be empty");
+        }
+        return new FindCommand(keyword);
     }
 }

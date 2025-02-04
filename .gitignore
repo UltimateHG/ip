@@ -26,3 +26,5 @@ text-ui-test/EXPECTED-UNIX.TXT
 # any test or data files generated
 data/uhgbot.txt
 test.txt
+data/
+test-data/

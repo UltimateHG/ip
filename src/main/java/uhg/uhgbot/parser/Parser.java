@@ -159,7 +159,7 @@ public class Parser {
      * @throws UhgBotException if keyword is empty.
      */
     private Command parseFind(String input) throws UhgBotException {
-        String keyword = input.substring(5).trim();
+        String keyword = input.substring(4).trim();
         if (keyword.isEmpty()) {
             throw new UhgBotException("Search keyword cannot be empty");
         }

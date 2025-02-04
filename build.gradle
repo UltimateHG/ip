@@ -29,11 +29,11 @@ test {
 }
 
 application {
-    mainClass.set("UhgBot.UhgBot")
+    mainClass.set("uhg.uhgbot.UhgBot")
 }
 
 shadowJar {
-    archiveBaseName = "UhgBot"
+    archiveBaseName = "uhgbot"
     archiveClassifier = null
 }
 

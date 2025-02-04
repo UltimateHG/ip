@@ -1,10 +1,10 @@
-package uhg.UhgBot.task;
+package uhg.uhgbot.task;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-import uhg.UhgBot.common.UhgBotException;
+import uhg.uhgbot.common.UhgBotException;
 
 public class Event extends Task {
     private LocalDateTime start;

@@ -1,6 +1,6 @@
-package uhg.UhgBot.command;
+package uhg.uhgbot.command;
 
-import uhg.UhgBot.task.Todo;
+import uhg.uhgbot.task.Todo;
 
 public class TodoCommand extends AddCommand {
     /**

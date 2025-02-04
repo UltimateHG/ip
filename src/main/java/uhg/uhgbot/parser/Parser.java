@@ -1,8 +1,18 @@
-package uhg.UhgBot.parser;
+package uhg.uhgbot.parser;
 
-import uhg.UhgBot.command.*;
-import uhg.UhgBot.common.UhgBotException;
-import uhg.UhgBot.task.*;
+import uhg.uhgbot.command.ByeCommand;
+import uhg.uhgbot.command.Command;
+import uhg.uhgbot.command.DeadlineCommand;
+import uhg.uhgbot.command.DeleteCommand;
+import uhg.uhgbot.command.EventCommand;
+import uhg.uhgbot.command.ListCommand;
+import uhg.uhgbot.command.MarkCommand;
+import uhg.uhgbot.command.TodoCommand;
+import uhg.uhgbot.command.UnmarkCommand;
+import uhg.uhgbot.common.UhgBotException;
+import uhg.uhgbot.task.Deadline;
+import uhg.uhgbot.task.Event;
+import uhg.uhgbot.task.Todo;
 
 public class Parser {
     /**

@@ -1,4 +1,4 @@
-package uhg.UhgBot.task;
+package uhg.uhgbot.task;
 
 public class Todo extends Task {
     /**

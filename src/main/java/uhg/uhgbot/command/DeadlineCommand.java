@@ -1,6 +1,6 @@
-package uhg.UhgBot.command;
+package uhg.uhgbot.command;
 
-import uhg.UhgBot.task.Deadline;
+import uhg.uhgbot.task.Deadline;
 
 public class DeadlineCommand extends AddCommand {
     /**

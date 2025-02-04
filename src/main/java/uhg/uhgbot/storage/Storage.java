@@ -1,4 +1,4 @@
-package uhg.UhgBot.storage;
+package uhg.uhgbot.storage;
 
 import java.io.*;
 import java.nio.file.*;
@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import uhg.UhgBot.task.*;
+import uhg.uhgbot.task.Task;
+import uhg.uhgbot.task.Todo;
+import uhg.uhgbot.task.Deadline;
+import uhg.uhgbot.task.Event;
 
 public class Storage {
     private final String filePath;

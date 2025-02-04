@@ -1,10 +1,10 @@
-package uhg.UhgBot.command;
+package uhg.uhgbot.command;
 
 import java.io.IOException;
 
-import uhg.UhgBot.storage.Storage;
-import uhg.UhgBot.task.Task;
-import uhg.UhgBot.tasklist.TaskList;
+import uhg.uhgbot.storage.Storage;
+import uhg.uhgbot.task.Task;
+import uhg.uhgbot.tasklist.TaskList;
 
 public abstract class AddCommand implements Command {
     private final Task task;

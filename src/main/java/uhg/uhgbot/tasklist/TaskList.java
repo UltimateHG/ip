@@ -1,12 +1,12 @@
-package uhg.UhgBot.tasklist;
+package uhg.uhgbot.tasklist;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import uhg.UhgBot.common.UhgBotException;
-import uhg.UhgBot.task.Task;
+import uhg.uhgbot.common.UhgBotException;
+import uhg.uhgbot.task.Task;
 
 public class TaskList {
     private List<Task> tasks;

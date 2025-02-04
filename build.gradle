@@ -29,7 +29,7 @@ test {
 }
 
 application {
-    mainClass.set("uhg.UhgBot.UhgBot")
+    mainClass.set("uhg.uhgbot.UhgBot")
 }
 
 shadowJar {

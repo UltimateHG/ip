@@ -1,10 +1,10 @@
-package uhg.UhgBot;
+package uhg.uhgbot;
 
-import uhg.UhgBot.command.Command;
-import uhg.UhgBot.parser.Parser;
-import uhg.UhgBot.storage.Storage;
-import uhg.UhgBot.tasklist.TaskList;
-import uhg.UhgBot.ui.Ui;
+import uhg.uhgbot.command.Command;
+import uhg.uhgbot.parser.Parser;
+import uhg.uhgbot.storage.Storage;
+import uhg.uhgbot.tasklist.TaskList;
+import uhg.uhgbot.ui.Ui;
 
 public class UhgBot {
     private final Storage storage;

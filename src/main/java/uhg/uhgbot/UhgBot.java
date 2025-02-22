@@ -25,6 +25,9 @@ public class UhgBot extends Application {
         parser = new Parser();
         try {
             tasks = new TaskList(storage.load());
+            assert storage != null : "Storage should be initialized";
+            assert parser != null : "Parser should be initialized";
+            assert tasks != null : "TaskList should be initialized";
         } catch (Exception e) {
             tasks = new TaskList();
             throw new RuntimeException("Error loading data: " + e.getMessage());
@@ -33,12 +36,17 @@ public class UhgBot extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        assert stage != null : "Stage cannot be null";
+        
         FXMLLoader fxmlLoader = new FXMLLoader(UhgBot.class.getResource(FXMLPATH));
+        assert fxmlLoader.getLocation() != null : "FXML file not found: " + FXMLPATH;
+        
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("UhgBot");
         stage.setScene(scene);
         
         MainWindow controller = fxmlLoader.getController();
+        assert controller != null : "FXML controller not initialized";
         controller.setBot(this);
         
         stage.show();
@@ -52,7 +60,15 @@ public class UhgBot extends Application {
      * @throws Exception if command processing fails
      */
     public String getResponse(String fullCommand) throws Exception {
+        assert fullCommand != null : "Command cannot be null";
+        assert !fullCommand.trim().isEmpty() : "Command cannot be empty";
+        
         Command c = parser.parse(fullCommand);
-        return c.execute(tasks, storage);
+        assert c != null : "Parser returned null command";
+        
+        String response = c.execute(tasks, storage);
+        assert response != null : "Command execution returned null response";
+        
+        return response;
     }
 }

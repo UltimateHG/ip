@@ -1,86 +1,75 @@
 package uhg.uhgbot;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
-import java.io.*;
-import java.nio.file.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class UhgBotTest {
     private static final String TEST_DATA_DIR = "./test-data";
     private static final String TEST_FILE = TEST_DATA_DIR + "/test.txt";
-    private ByteArrayOutputStream outContent;
-    private PrintStream originalOut;
-    private InputStream originalIn;
+    private UhgBot bot;
 
     @BeforeEach
     public void setUp() throws IOException {
-        Files.deleteIfExists(Paths.get(TEST_FILE));
-        Files.deleteIfExists(Paths.get(TEST_DATA_DIR));
-        outContent = new ByteArrayOutputStream();
-        originalOut = System.out;
-        originalIn = System.in;
-        System.setOut(new PrintStream(outContent));
         Files.createDirectories(Paths.get(TEST_DATA_DIR));
+        bot = new UhgBot();
     }
 
     @AfterEach
     public void tearDown() throws IOException {
-        System.setOut(originalOut);
-        System.setIn(originalIn);
         Files.deleteIfExists(Paths.get(TEST_FILE));
         Files.deleteIfExists(Paths.get(TEST_DATA_DIR));
     }
 
     /**
-     * Tests bot initialization
+     * Tests bot response to list command
      */
     @Test
-    public void testInitialization() {
-        UhgBot bot = new UhgBot();
-        String output = outContent.toString();
-        assertTrue(output.isEmpty()); // Constructor shouldn't print anything
+    public void testListCommand() throws Exception {
+        String response = bot.getResponse("list");
+        assertEquals("No tasks in the list!", response);
     }
 
     /**
-     * Tests bot welcome message
+     * Tests bot response to todo command
      */
     @Test
-    public void testWelcomeMessage() {
-        simulateInput("bye\n");
-        new UhgBot().run();
-        String output = outContent.toString();
-        assertTrue(output.contains("Hello! I'm UhgBot"));
-        assertTrue(output.contains("What can I do for you?"));
+    public void testTodoCommand() throws Exception {
+        String response = bot.getResponse("todo test task");
+        assertTrue(response.contains("Got it. I've added this task"));
+        assertTrue(response.contains("test task"));
     }
 
     /**
-     * Tests basic command execution
+     * Tests bot handling of invalid command
      */
     @Test
-    public void testBasicCommandExecution() {
-        simulateInput("todo test task\nlist\nbye\n");
-        new UhgBot().run();
-        String output = outContent.toString();
-        assertTrue(output.contains("Got it. I've added this task"));
-        assertTrue(output.contains("test task"));
-        assertTrue(output.contains("Here are the tasks in your list"));
+    public void testInvalidCommand() {
+        assertThrows(Exception.class, () -> bot.getResponse("invalid"));
     }
 
     /**
-     * Tests error handling
+     * Tests bot response to empty command
      */
     @Test
-    public void testErrorHandling() {
-        simulateInput("invalid command\nbye\n");
-        new UhgBot().run();
-        String output = outContent.toString();
-        assertTrue(output.contains("Command error! Invalid command"));
+    public void testEmptyCommand() {
+        assertThrows(Exception.class, () -> bot.getResponse(""));
     }
 
-    private void simulateInput(String input) {
-        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
+    /**
+     * Tests persistence of tasks
+     */
+    @Test
+    public void testTaskPersistence() throws Exception {
+        bot.getResponse("todo test task");
+        UhgBot newBot = new UhgBot(); // Should load saved task
+        String response = newBot.getResponse("list");
+        assertTrue(response.contains("test task"));
     }
 }

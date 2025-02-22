@@ -40,11 +40,7 @@
 #### Task Scheduling
 * `snooze INDEX DURATION` - Postpones a deadline/event
   * Duration format: `+<number><unit>`
-  * Units: 
-
-d
-
- (days), `h` (hours), `m` (minutes)
+  * Units: `d` (days), `h` (hours), `m` (minutes)
   * Example: `snooze 1 +2h` postpones task #1 by 2 hours
 
 #### Search

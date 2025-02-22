@@ -8,6 +8,7 @@ import uhg.uhgbot.command.EventCommand;
 import uhg.uhgbot.command.FindCommand;
 import uhg.uhgbot.command.ListCommand;
 import uhg.uhgbot.command.MarkCommand;
+import uhg.uhgbot.command.SnoozeCommand;
 import uhg.uhgbot.command.TodoCommand;
 import uhg.uhgbot.command.UnmarkCommand;
 import uhg.uhgbot.common.UhgBotException;
@@ -49,6 +50,8 @@ public class Parser {
             return parseUnmark(input);
         case "find":
             return parseFind(input);
+        case "snooze":
+            return parseSnooze(input);
         default:
             throw new UhgBotException("Invalid command: " + input);
         }
@@ -164,5 +167,29 @@ public class Parser {
             throw new UhgBotException("Search keyword cannot be empty");
         }
         return new FindCommand(keyword);
+    }
+
+    /**
+     * Snoozes a task.
+     * Correct syntax should be "snooze <task number> <duration>".
+     * 
+     * @param input Snooze command following syntax.
+     * @return SnoozeCommand object.
+     * @throws UhgBotException If the input string is invalid or duration is invalid.
+     */
+    private Command parseSnooze(String input) throws UhgBotException {
+        String[] parts = input.split(" ");
+        if (parts.length != 3) {
+            throw new UhgBotException("Invalid snooze format. Use: snooze <task number> <duration>");
+        }
+        try {
+            int index = Integer.parseInt(parts[1]);
+            if (!parts[2].matches("\\+\\d+[dhm]")) {
+                throw new UhgBotException("Invalid duration format. Use +<number><unit>, e.g. +1d, +2h");
+            }
+            return new SnoozeCommand(index, parts[2]);
+        } catch (NumberFormatException e) {
+            throw new UhgBotException("Please provide a valid task number");
+        }
     }
 }

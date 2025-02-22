@@ -113,6 +113,19 @@ public class TaskList {
             .collect(Collectors.joining("\n"));
     }
 
+    /**
+     * Replaces the task at the specified index with the new task.
+     * @param index
+     * @param task
+     * @throws UhgBotException
+     */
+    public void replace(int index, Task task) throws UhgBotException {
+        if (index < 0 || index >= tasks.size()) {
+            throw new UhgBotException("Invalid task index: " + (index + 1));
+        }
+        tasks.set(index, task);
+    }
+
     @Override
     public String toString() {
         return IntStream.range(0, tasks.size())

@@ -19,7 +19,14 @@ public class UnmarkCommand implements Command {
     }
 
     @Override
-    public String execute(TaskList tasks, Storage storage) throws UhgBotException, IOException {
+    public String execute(Object... args) throws UhgBotException, IOException {
+        if (args.length < 2 || !(args[0] instanceof TaskList) || !(args[1] instanceof Storage)) {
+            throw new UhgBotException("Invalid arguments for MarkCommand");
+        }
+        
+        TaskList tasks = (TaskList) args[0];
+        Storage storage = (Storage) args[1];
+        
         Task task = tasks.get(index - 1);
         task.markAsUndone();
         storage.save(tasks.getTaskList());

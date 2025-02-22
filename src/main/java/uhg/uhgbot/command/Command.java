@@ -3,19 +3,18 @@ package uhg.uhgbot.command;
 import java.io.IOException;
 
 import uhg.uhgbot.common.UhgBotException;
-import uhg.uhgbot.storage.Storage;
-import uhg.uhgbot.tasklist.TaskList;
 
 public interface Command {
     /**
-     * Executes the command and returns the response as a string.
-     * @param tasks TaskList object containing Tasks.
-     * @param storage Storage object for file I/O and saving Tasks to disk.
-     * @return Command response.
+     * Executes the command with variable arguments.
+     * First arg must be TaskList, second must be Storage.
+     * 
+     * @param args TaskList and Storage must be first two arguments
+     * @return Command response string
      * @throws UhgBotException
      * @throws IOException
      */
-    String execute(TaskList tasks, Storage storage) throws UhgBotException, IOException;
+    String execute(Object... args) throws UhgBotException, IOException;
     /**
      * Returns true if the command is an exit command.
      * @return True if the command is an exit command.

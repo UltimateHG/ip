@@ -19,9 +19,15 @@ public class DeleteCommand implements Command {
     }
 
     @Override
-    public String execute(TaskList tasks, Storage storage) throws UhgBotException, IOException {
-        Task removed;
-        removed = tasks.remove(index - 1);
+    public String execute(Object... args) throws UhgBotException, IOException {
+        if (args.length < 2 || !(args[0] instanceof TaskList) || !(args[1] instanceof Storage)) {
+            throw new UhgBotException("Invalid arguments for DeleteCommand");
+        }
+        
+        TaskList tasks = (TaskList) args[0];
+        Storage storage = (Storage) args[1];
+        
+        Task removed = tasks.remove(index - 1);
         storage.save(tasks.getTaskList());
         return String.format("Noted. I've removed this task:\n  %s\nNow you have %d tasks in the list.",
             removed.toString(), tasks.size());

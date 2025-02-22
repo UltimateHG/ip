@@ -1,5 +1,6 @@
 package uhg.uhgbot.command;
 
+import uhg.uhgbot.common.UhgBotException;
 import uhg.uhgbot.storage.Storage;
 import uhg.uhgbot.tasklist.TaskList;
 import java.util.List;
@@ -18,7 +19,12 @@ public class FindCommand implements Command {
     }
 
     @Override
-    public String execute(TaskList tasks, Storage storage) {
+    public String execute(Object... args) throws UhgBotException {
+        if (args.length < 2 || !(args[0] instanceof TaskList) || !(args[1] instanceof Storage)) {
+            throw new UhgBotException("Invalid arguments for FindCommand");
+        }
+        
+        TaskList tasks = (TaskList) args[0];
         List<Task> matches = tasks.findByKeyword(keyword);
         if (matches.isEmpty()) {
             return "No matching tasks found.";
